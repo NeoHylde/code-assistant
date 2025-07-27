@@ -9,9 +9,18 @@ from PyQt5.QtWidgets import (
     QFileDialog
 )
 
-from PyQt5.QtCore import Qt
-
+from pynput import keyboard
+from PyQt5.QtCore import Qt, pyqtSignal, QObject, QThread, QTimer
 from Capturer import Capture
+
+COMBINATIONS = [
+    {keyboard.Key.shift, keyboard.KeyCode(char='a')},
+    {keyboard.Key.shift, keyboard.KeyCode(char='A')}
+    ]
+current = set()
+
+class TriggerHandler(QObject):
+    trigger_gui = pyqtSignal()
 
 class ScreenRegionSelector(QMainWindow):
     def __init__(self,):
@@ -52,13 +61,30 @@ class ScreenRegionSelector(QMainWindow):
         if file_name:
             self.capturer.imgmap.save(file_name)
 
+def start_keyboard_listener(trigger_handler):
+    def on_press(key):
+        if any([key in COMBO for COMBO in COMBINATIONS]):
+            current.add(key)
+            if any(all(k in current for k in COMBO) for COMBO in COMBINATIONS):
+                trigger_handler.trigger_gui.emit()
+
+    def on_release(key):
+        if any([key in COMBO for COMBO in COMBINATIONS]):
+            current.discard(key)
+    
+    listener = keyboard.Listener(on_press=on_press, on_release=on_release)
+    listener.start()
+
+
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+            
     app.setStyleSheet("""QFrame {
                         background-color: #3f3f3f;
-                      }
+                    }
                       
-                      QPushButton {
+                    QPushButton {
                         border-radius: 5px;
                         background-color: rgb(60, 90, 255);
                         padding: 10px;
@@ -66,11 +92,17 @@ if __name__ == "__main__":
                         font-weight: bold;
                         font-family: Arial;
                         font-size: 12px;
-                      }
-                      
-                      QPushButton::hover {
+                    }
+                    
+                    QPushButton::hover {
                         background-color: rgb(60, 20, 255);
-                      }""")
-    selector= ScreenRegionSelector()
-    selector.show()
-    app.exit(app.exec_())
+                    }""")
+        
+    trigger_handler = TriggerHandler()
+    selector = ScreenRegionSelector()
+
+    trigger_handler.trigger_gui.connect(selector.show)
+    
+    start_keyboard_listener(trigger_handler=trigger_handler)
+
+    sys.exit(app.exec_())
