@@ -1,4 +1,4 @@
-# Code Assistant – Screenshot to Code Analyzer
+# Code Assistant - Screenshot to Code Analyzer
 
 This is a desktop tool that lets you select a region of your screen, take a screenshot, and analyze the contents using OpenAI's GPT-4o vision model. It's designed to help you understand code from images such as terminal outputs, tutorials, or errors.
 
