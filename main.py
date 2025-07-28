@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QFrame, 
     QPushButton,
-    QFileDialog
+    QTextEdit
 )
 
 from pynput import keyboard
@@ -38,11 +38,14 @@ class ScreenRegionSelector(QMainWindow):
         lay.setContentsMargins(5,5,5,5)
 
         self.label = QLabel()
+        self.text = QTextEdit()
+        self.text.setReadOnly(True)
         self.btn_capture = QPushButton("Capture")
         self.btn_capture.clicked.connect(self.capture)
 
         lay.addWidget(self.label)
         lay.addWidget(self.btn_capture)
+        lay.addWidget(self.text)
 
         self.setCentralWidget(frame)
 
