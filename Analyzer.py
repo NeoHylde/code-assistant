@@ -5,6 +5,7 @@ from openai import OpenAI
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 
 class AnalyzerWorker(QObject):
+    #signals for result and error handling
     finished = pyqtSignal(str)
     error = pyqtSignal(str)
 
@@ -41,7 +42,7 @@ class AnalyzerWorker(QObject):
                 ],
             )
 
-            #store result
+            #store result in signal
             result = response.choices[0].message.content
             self.finished.emit(result)
         
