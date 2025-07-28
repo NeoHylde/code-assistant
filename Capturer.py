@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QApplication, QRubberBand
 from PyQt5.QtGui import QCursor, QMouseEvent, QKeyEvent
-from PyQt5.QtCore import Qt, QPoint, QRect, QThread
+from PyQt5.QtCore import Qt, QPoint, QRect, QThread, QTimer
 from Analyzer import AnalyzerWorker
 from PIL import Image
 
@@ -22,10 +22,9 @@ class Capture(QWidget):
         self.main.hide()
 
         self.setMouseTracking(True)
-        desk_size = QApplication.desktop()
-        self.setGeometry(0, 0, desk_size.width(), desk_size.height())
         self.setWindowFlags(self.windowFlags() | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         self.setWindowOpacity(0.15)
+        self.showFullScreen()
 
         self.rubber_band = QRubberBand(QRubberBand.Rectangle, self)
         self.origin = QPoint()
@@ -85,11 +84,16 @@ class Capture(QWidget):
 
             self.close()
     
-    def keyPressEvent(self, event: QKeyEvent) -> None:
+    def keyPressEvent(self, event: QKeyEvent | None) -> None:
         if event.key() == Qt.Key_Escape:
             QApplication.restoreOverrideCursor()
             self.main.show()
             self.close()
+
+    def closeEvent(self, event):
+        self.releaseKeyboard()
+        QApplication.restoreOverrideCursor()
+        super().closeEvent(event)
     
     def handle_result(self, result):
         self.main.text.setText(result)
