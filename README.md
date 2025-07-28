@@ -1,26 +1,29 @@
-# Code Assistant - Screenshot to Code Analyzer
+# Code Assistant: Screenshot to Code Analyzer
 
-This is a desktop tool that lets you select a region of your screen, take a screenshot, and analyze the contents using OpenAI's GPT-4o vision model. It's designed to help you understand code from images such as terminal outputs, tutorials, or errors.
+A desktop tool that lets you select a screen region, take a screenshot, and analyze it using OpenAI's GPT-4o Vision model. Useful for understanding terminal outputs, tutorial snippets, or debugging screenshots.
 
 ## Features
 
-- Global hotkey (Shift + A) to trigger screen capture
-- Region-based screenshot using a mouse-drag interface
-- Sends image to OpenAI for explanation
-- Displays both the screenshot and the AI-generated analysis
-- Saves the screenshot locally as `img1.png`
+- Trigger capture from anywhere using a global hotkey (Shift + A)
+- Draw a selection box with your mouse to capture a specific screen region
+- Screenshot is automatically analyzed with GPT-4o
+- Displays both the captured image and GPT-generated explanation
+- Image is saved locally as `img1.png`
+- Includes a workaround to ensure Escape key works on initial capture
 
 ## Requirements
 
-- Python 3.8 or higher
+- Python 3.8 or newer
 - OpenAI API key with GPT-4o access and billing enabled
-- Packages:
+- Dependencies:
   - openai
   - python-dotenv
   - pynput
   - PyQt5
+  - mouse
+  - Pillow
 
-Install dependencies:
+Install everything with:
 
 ```bash
-pip install openai python-dotenv pynput PyQt5
+pip install openai python-dotenv pynput PyQt5 mouse Pillow
