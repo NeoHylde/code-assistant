@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QApplication, QRubberBand
 from PyQt5.QtGui import QCursor, QMouseEvent, QKeyEvent
 from PyQt5.QtCore import Qt, QPoint, QRect
+from Analyzer import Analyze
 
 class Capture(QWidget):
 
@@ -49,6 +50,11 @@ class Capture(QWidget):
 
             self.main.label.setPixmap(self.imgmap)
             self.main.show()
+
+            file_name = "img1.png"
+            self.imgmap.save(file_name)
+            self.main.analyzer = Analyze()
+            self.main.analyzer.analyze_code_image(file_name)
 
             self.close()
     
