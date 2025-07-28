@@ -43,7 +43,7 @@ class ScreenRegionSelector(QMainWindow):
         
         self.btn_save = QPushButton("Save")
         self.btn_save.clicked.connect(self.save)
-        self.btn_save.setVisible(False)
+        self.btn_save.setVisible(True)
 
         lay.addWidget(self.label)
         lay.addWidget(self.btn_capture)
@@ -54,7 +54,6 @@ class ScreenRegionSelector(QMainWindow):
     def capture(self):
         self.capturer = Capture(self)
         self.capturer.show()
-        self.btn_save.setVisible(True)
 
     def save(self):
         file_name, _ = QFileDialog.getSaveFileName(self, "Save Image", "", "Image files (*.png *.jpg *.bmp)")
@@ -62,7 +61,7 @@ class ScreenRegionSelector(QMainWindow):
             self.capturer.imgmap.save(file_name)
 
 def start_keyboard_listener(trigger_handler):
-    def on_press(key):
+    def on_press(key):     
         if any([key in COMBO for COMBO in COMBINATIONS]):
             current.add(key)
             if any(all(k in current for k in COMBO) for COMBO in COMBINATIONS):
@@ -101,7 +100,7 @@ if __name__ == "__main__":
     trigger_handler = TriggerHandler()
     selector = ScreenRegionSelector()
 
-    trigger_handler.trigger_gui.connect(selector.show)
+    trigger_handler.trigger_gui.connect(selector.capture)
     
     start_keyboard_listener(trigger_handler=trigger_handler)
 
