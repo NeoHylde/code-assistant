@@ -1,7 +1,18 @@
 from PyQt5.QtWidgets import QWidget, QApplication, QRubberBand
 from PyQt5.QtGui import QCursor, QMouseEvent, QKeyEvent
-from PyQt5.QtCore import Qt, QPoint, QRect
-from Analyzer import Analyze
+from PyQt5.QtCore import Qt, QPoint, QRect, QThread
+from Analyzer import AnalyzerWorker
+from PIL import Image
+
+#resize image, not sure if this helps performance, probably for larger imgs
+@staticmethod
+def resize_image(image_path, output_path, max_width=1024):
+        with Image.open(image_path) as img:
+            if img.width > max_width:
+                ratio = max_width / img.width
+                new_size = (max_width, int(img.height * ratio))
+                img = img.resize(new_size, Image.ANTIALIAS)
+            img.save(output_path)
 
 class Capture(QWidget):
 
@@ -53,8 +64,24 @@ class Capture(QWidget):
 
             file_name = "img1.png"
             self.imgmap.save(file_name)
-            self.main.analyzer = Analyze()
-            self.main.analyzer.analyze_code_image(file_name)
+
+            resize_image("img1.png", "img1.png")
+
+            self.main.text.setText("Analyzing image...")
+
+            #start new thread so gui still is displayed while api returns response
+            self.thread = QThread()
+            self.worker = AnalyzerWorker(file_name)
+            self.worker.moveToThread(self.thread)
+
+            self.thread.started.connect(self.worker.run)
+            self.worker.finished.connect(self.handle_result)
+            self.worker.error.connect(self.handle_error)
+            self.worker.finished.connect(self.thread.quit)
+            self.worker.finished.connect(self.worker.deleteLater)
+            self.thread.finished.connect(self.thread.deleteLater)
+
+            self.thread.start()
 
             self.close()
     
@@ -63,3 +90,11 @@ class Capture(QWidget):
             QApplication.restoreOverrideCursor()
             self.main.show()
             self.close()
+    
+    def handle_result(self, result):
+        self.main.text.setText(result)
+        self.close()
+
+    def handle_error(self, error_msg):
+        self.main.text.setText(f"Error: {error_msg}")
+        self.close()
