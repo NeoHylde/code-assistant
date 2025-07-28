@@ -6,12 +6,13 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QFrame, 
     QPushButton,
-    QTextEdit
+    QTextEdit,
 )
 
 from pynput import keyboard
 from PyQt5.QtCore import Qt, pyqtSignal, QObject, QThread, QTimer
 from Capturer import Capture
+import mouse
 
 COMBINATIONS = [
     {keyboard.Key.shift, keyboard.KeyCode(char='a')},
@@ -55,6 +56,9 @@ class ScreenRegionSelector(QMainWindow):
     def capture(self):
         self.capturer = Capture(self)
         self.capturer.show()
+        
+        # steal focus work around, setfocuspolicy, setfocus etc was not working
+        mouse.click('right')
             
 def start_keyboard_listener(trigger_handler):
     def on_press(key):     
