@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QApplication, QRubberBand
-from PyQt5.QtGui import QCursor, QMouseEvent
+from PyQt5.QtGui import QCursor, QMouseEvent, QKeyEvent
 from PyQt5.QtCore import Qt, QPoint, QRect
 
 class Capture(QWidget):
@@ -50,4 +50,10 @@ class Capture(QWidget):
             self.main.label.setPixmap(self.imgmap)
             self.main.show()
 
+            self.close()
+    
+    def keyPressEvent(self, event: QKeyEvent) -> None:
+        if event.key() == Qt.Key_Escape:
+            QApplication.restoreOverrideCursor()
+            self.main.show()
             self.close()
