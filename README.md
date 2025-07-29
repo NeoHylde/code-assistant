@@ -2,6 +2,12 @@
 
 A desktop tool that lets you select a screen region, take a screenshot, and analyze it using OpenAI's GPT-4o Vision model. Useful for understanding terminal outputs, tutorial snippets, or debugging screenshots.
 
+## Demo Video
+
+In this short demo, the user enters the hotkey to start up CodeSnip, then snips a piece of code, and gets a detailed response from the GPT-4o vision api
+
+https://github.com/user-attachments/assets/86b31e97-f0e8-464e-a1de-803f27a35899
+
 ## Features
 
 - Trigger capture from anywhere using a global hotkey (Shift + A)
