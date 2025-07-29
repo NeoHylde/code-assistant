@@ -37,6 +37,7 @@ class ScreenRegionSelector(QMainWindow):
         lay = QVBoxLayout(frame)
         lay.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lay.setContentsMargins(5,5,5,5)
+        self.setWindowTitle("CodeSnip")
 
         #screenshot display
         self.label = QLabel()
@@ -79,44 +80,50 @@ if __name__ == "__main__":
             
     app.setStyleSheet("""
     QFrame {
-        background-color: #2c2c2c;
-        border-radius: 8px;
+        background-color: #0d1117;
+        border-radius: 6px;
         padding: 10px;
     }
 
     QPushButton {
+        background-color: #21262d;
+        border: 1px solid #30363d;
         border-radius: 6px;
-        background-color: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                          stop:0 #4e7eff, stop:1 #3a54ff);
-        padding: 10px 16px;
-        color: #ffffff;
+        padding: 6px 12px;
         font-weight: 600;
-        font-family: "Segoe UI", Arial, sans-serif;
+        font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
         font-size: 13px;
-        border: none;
+        color: #c9d1d9;
     }
 
     QPushButton:hover {
-        background-color: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                          stop:0 #5e5cff, stop:1 #4630ff);
+        background-color: #30363d;
+        border-color: #8b949e;
+    }
+
+    QPushButton:pressed {
+        background-color: #161b22;
+        border-color: #6e7681;
     }
 
     QTextEdit {
-        background-color: #1e1e1e;
-        color: #ffffff;
-        border: 1px solid #444;
-        font-family: "Consolas", monospace;
-        font-size: 12px;
+        background-color: #161b22;
+        color: #c9d1d9;
+        border: 1px solid #30363d;
+        font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+        font-size: 13px;
         padding: 8px;
         border-radius: 6px;
     }
 
     QLabel {
-        color: white;
+        color: #c9d1d9;
         font-size: 13px;
         padding: 4px;
     }
     """)
+
+
 
         
     trigger_handler = TriggerHandler()
